@@ -1,8 +1,8 @@
 import torch
 import torch.nn as nn
 
-from mli.models import BaseModel
-from mli.models.layers import LILinear, LIConv2d, LIBatchNorm2d
+from lib.mli.models import BaseModel
+from lib.mli.models.layers import LILinear, LIConv2d, LIBatchNorm2d
 
 
 def conv3x3(in_planes, out_planes, stride=1, groups=1, dilation=1):

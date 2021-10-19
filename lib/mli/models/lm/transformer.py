@@ -3,9 +3,9 @@ import torch
 
 import torch.nn as nn
 
-from mli.models.layers import LILinear, LIEmbedding
-from mli.models import BaseModel
-from mli.models.layers import LITransformerEncoder, LITransformerEncoderLayer
+from lib.mli.models.layers import LILinear, LIEmbedding
+from lib.mli.models import BaseModel
+from lib.mli.models.layers import LITransformerEncoder, LITransformerEncoderLayer
 
 
 class PositionalEncoding(nn.Module):

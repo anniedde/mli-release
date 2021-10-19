@@ -3,8 +3,8 @@ import torch
 import numpy as np
 import tqdm
 
-from mli.utils.autodiff import rop
-from mli.models import warm_bn, interpolate_state
+from lib.mli.utils.autodiff import rop
+from lib.mli.models import warm_bn, interpolate_state
 
 
 def trapez_integrate(fn, alphas):

@@ -6,7 +6,7 @@ import torch.nn.functional as F
 from torch.utils.data import IterableDataset, DataLoader
 import numpy as np
 
-from mli.metrics import compute_avg_gauss_length
+from lib.mli.metrics import compute_avg_gauss_length
 
 
 class InterpolatingModel(nn.Module):

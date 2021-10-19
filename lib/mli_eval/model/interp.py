@@ -1,7 +1,7 @@
 import numpy as np
 import tqdm
 
-from mli.models import warm_bn, interpolate_state
+from lib.mli.models import warm_bn, interpolate_state
 from .eval import eval_model, eval_model_per_example
 
 

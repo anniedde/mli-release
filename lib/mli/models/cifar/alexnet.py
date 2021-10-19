@@ -2,8 +2,8 @@
 
 import torch.nn as nn
 
-from mli.models.layers import LILinear, LIConv2d
-from mli.models import BaseModel
+from lib.mli.models.layers import LILinear, LIConv2d
+from lib.mli.models import BaseModel
 
 
 class AlexNet(BaseModel, nn.Module):

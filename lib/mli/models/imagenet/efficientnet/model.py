@@ -26,8 +26,8 @@ from .utils import (
     calculate_output_image_size
 )
 
-from mli.models import BaseModel
-from mli.models.layers import LIConv2d, LIBatchNorm2d, LILinear
+from lib.mli.models import BaseModel
+from lib.mli.models.layers import LIConv2d, LIBatchNorm2d, LILinear
 
 
 VALID_MODELS = (

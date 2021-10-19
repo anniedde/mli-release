@@ -1,7 +1,7 @@
 import math
 import torch.optim as optim
 
-from mli.optim.kfac_utils import *
+from lib.mli.optim.kfac_utils import *
 
 
 class KFACOptimizer(optim.Optimizer):

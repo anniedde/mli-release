@@ -1,6 +1,7 @@
 import copy
 import functools
 import os
+import sys
 
 import numpy as np
 import torch
@@ -11,16 +12,17 @@ from torch.optim.lr_scheduler import MultiStepLR
 
 from munch import Munch
 
-import mli.models as models
-from mli.data import load_data
-from mli.metrics import param_dist
-from mli.models import get_loss_fn, interpolate_state
-from mli.metrics.gauss_len import compute_avg_gauss_length, compute_avg_gauss_length_bn
-from mli.optim import get_optimizer
-from mli.sacred import SlurmFileStorageObserver
+sys.path.insert(1, '/usr/xtmp/CSPlus/VOLDNN/Annie/mli-release')
+import lib.mli.models as models
+from lib.mli.data import load_data
+from lib.mli.metrics import param_dist
+from lib.mli.models import get_loss_fn, interpolate_state
+from lib.mli.metrics.gauss_len import compute_avg_gauss_length, compute_avg_gauss_length_bn
+from lib.mli.optim import get_optimizer
+from lib.mli.sacred import SlurmFileStorageObserver
 
-from mli_eval.model.interp import interp_networks
-from mli_eval.model.loss import EvalClassifierLoss
+from lib.mli_eval.model.interp import interp_networks
+from lib.mli_eval.model.loss import EvalClassifierLoss
 
 EXPERIMENT_NAME = "mli_cifar10"
 RUN_DIR = "runs"

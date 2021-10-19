@@ -4,8 +4,8 @@ import math
 
 import torch.nn as nn
 
-from mli.models.layers import LIBatchNorm2d, LILinear, LIConv2d
-from mli.models import BaseModel
+from lib.mli.models.layers import LIBatchNorm2d, LILinear, LIConv2d
+from lib.mli.models import BaseModel
 
 
 model_urls = {

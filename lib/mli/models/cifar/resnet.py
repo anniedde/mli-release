@@ -2,8 +2,8 @@ import torch
 import torch.nn as nn
 import numpy as np
 
-from mli.models import BaseModel
-from mli.models.layers import LIBatchNorm2d, LILinear
+from lib.mli.models import BaseModel
+from lib.mli.models.layers import LIBatchNorm2d, LILinear
 from .utils import conv3x3, Downsampler
 
 

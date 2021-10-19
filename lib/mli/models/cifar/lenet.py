@@ -3,8 +3,8 @@
 import torch.nn.functional as F
 import torch.nn as nn
 
-from mli.models.layers import LILinear, LIConv2d
-from mli.models import BaseModel
+from lib.mli.models.layers import LILinear, LIConv2d
+from lib.mli.models import BaseModel
 
 
 class LeNet(BaseModel, nn.Module):

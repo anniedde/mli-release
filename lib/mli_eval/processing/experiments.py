@@ -3,7 +3,7 @@ import json
 import torch
 import numpy as np
 
-import mli.metrics as metrics_utils
+import lib.mli.metrics as metrics_utils
 
 
 def get_run_stats(expdir, compute_weight_dist=True):

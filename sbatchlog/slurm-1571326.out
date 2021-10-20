@@ -1,0 +1,13 @@
+{'dset_name': 'cifar10', 'datasize': 60000, 'batchsize': 128, 'model_name': 'alexnet', 'loss_fn': 'ce', 'num_classes': 10, 'identity_init': True, 'init_type': 'default', 'epochs': 200, 'optim_name': 'sgd', 'lr': 0.1, 'beta': 0.9, 'weight_decay': 0.0001, 'decay_milestones': [60, 90, 120], 'decay_factor': 0.1, 'alpha_steps': 50, 'cuda': True, 'min_loss_threshold': 1.5, 'min_loss_epoch_check': 35, 'log_wdist': True, 'tag': 'cifar10', 'seed': 17, 'save_freq': 25, 'eval_gl': True, 'run_num': 1}
+INFO - mli_cifar10 - Running command 'main'
+INFO - mli_cifar10 - Started run with ID "hi_from_fileobserver"
+  0%|          | 0/3 [00:00<?, ?it/s] 33%|███▎      | 1/3 [00:12<00:25, 12.72s/it] 67%|██████▋   | 2/3 [00:25<00:12, 12.70s/it]100%|██████████| 3/3 [00:37<00:00, 12.66s/it]100%|██████████| 3/3 [00:37<00:00, 12.65s/it]
+INFO - mli_cifar10 - Completed after 0:00:43
+<sacred.run.Run object at 0x14c597c89518>
+<class 'sacred.run.Run'>
+hi_from_fileobserver
+Files already downloaded and verified
+Files already downloaded and verified
+Found an existing checkpoint. Loading state...
+Training from epoch 3
+Files already downloaded and verified

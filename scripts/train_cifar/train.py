@@ -3,6 +3,7 @@ import functools
 import os
 import sys
 
+import json
 import numpy as np
 import torch
 import torch.nn.functional as F
@@ -19,6 +20,7 @@ from lib.mli.metrics import param_dist
 from lib.mli.models import get_loss_fn, interpolate_state
 from lib.mli.metrics.gauss_len import compute_avg_gauss_length, compute_avg_gauss_length_bn
 from lib.mli.optim import get_optimizer
+from lib.mli_eval.plotting.interp import plot_interp
 from lib.mli.sacred import SlurmFileStorageObserver
 
 from lib.mli_eval.model.interp import interp_networks
@@ -47,7 +49,7 @@ def get_config():
     init_type = "default"
 
     # Optimizer Config
-    epochs = 1
+    epochs = 200
     optim_name = "sgd"
     lr = 0.1
     beta = 0.9
@@ -67,6 +69,7 @@ def get_config():
     seed = 17
     save_freq = 25
     eval_gl = True
+    run_num = 1
 
 
 @ex.capture
@@ -273,6 +276,10 @@ def get_run_dir():
 
 @ex.automain
 def main(_run):
+    print(_run)
+    print(type(_run))
+    print(get_run_id())
+
     cfg = Munch.fromDict(_run.config)
     train_loader = load_data_captured()
     eval_loader = load_data_captured(train=False)
@@ -304,6 +311,9 @@ def main(_run):
         _run.log_scalar("eval.interpolation.loss", metrics[1]['loss'][i])
         _run.log_scalar("eval.interpolation.acc", metrics[1]['acc'][i])
         _run.log_scalar("eval.interpolation.alpha", alphas[i])
+
+    
+    #plot_interp(get_run_id(), cfg, metrics_plot, os.path.join(RUN_DIR, EXPERIMENT_NAME, get_run_dir()))
 
     # Evaluate gauss length
     if cfg.eval_gl:

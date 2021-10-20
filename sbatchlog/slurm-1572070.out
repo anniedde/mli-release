@@ -1,0 +1,27 @@
+Unable to init server: Could not connect: Connection refused
+Unable to init server: Could not connect: Connection refused
+
+(eval_runs.py:24891): Gdk-CRITICAL **: 20:54:04.332: gdk_cursor_new_for_display: assertion 'GDK_IS_DISPLAY (display)' failed
+Now in directory  1571447
+Incomplete experiment output in runs/mli_cifar10/1571447
+Now in directory  1571495
+Now in directory  _sources
+Now in directory  1571415
+Incomplete experiment output in runs/mli_cifar10/1571415
+Now in directory  hi
+Now in directory  1571672
+Now in directory  1571543
+Now in directory  1571670
+Now in directory  1571669
+Now in directory  1571677
+Now in directory  hi_from_fileobserver
+Now in directory  1571577
+Found 9 runs
+Traceback (most recent call last):
+  File "scripts/train_cifar/eval/eval_runs.py", line 118, in <module>
+    process_experiments(args.expdir, args.outdir)
+  File "scripts/train_cifar/eval/eval_runs.py", line 113, in process_experiments
+    plot_interp(all_configs[i], all_metrics[i], outdir)
+  File "/usr/xtmp/CSPlus/VOLDNN/Annie/mli-release/lib/mli_eval/plotting/interp.py", line 97, in plot_interp
+    run_num = config["run_num"]
+KeyError: 'run_num'

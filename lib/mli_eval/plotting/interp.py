@@ -1,10 +1,12 @@
 import os
+import sys
 
 import matplotlib.pyplot as plt
 plt.style.use('seaborn')
 import numpy as np
 
-import mli.metrics as metrics_utils
+sys.path.insert(1, '/usr/xtmp/CSPlus/VOLDNN/Annie/mli-release')
+import lib.mli.metrics as metrics_utils
 
 
 def plot_all_interp(
@@ -92,34 +94,37 @@ def plot_all_lm_interp(
 
 def plot_interp(config, metrics, outdir, fname_labels=[]):
   epochs = config["epochs"]
-  run_id = config["run_id"]
+  run_num = config["run_num"]
   try:
     train_losses = metrics['train.loss']['values']
     alpha_steps = metrics['train.interpolation.alpha']['values']
     interp_losses = metrics['train.interpolation.loss']['values']
   except:
+    print('plot_interp did not work')
     return
 
   fig = plt.figure(figsize=(6,3))
   ax1 = fig.add_subplot(111)
-  ax2 = ax1.twiny()
+  #ax2 = ax1.twiny()
 
   ax1.plot(alpha_steps, np.array(interp_losses), c='green', ls='--', label='Interpolation Loss')
   ax1.set_xlabel(r"Interpolation ($\alpha$)", size=14)
   ax1.set_ylabel("Loss", size=14)
   ax1.set_xlim(0, 1)
 
-  ax2.plot(np.linspace(0, epochs, len(train_losses)), train_losses, label='Train Loss')
-  ax2.set_xlim(0, epochs)
-  ax2.set_xlabel("Train epochs", size=14)
-  ax2.set_xticks([0, epochs * 0.2, epochs * .4, epochs * .6, epochs * 0.8, epochs])
+  #ax2.plot(np.linspace(0, epochs, len(train_losses)), train_losses, label='Train Loss')
+  #ax2.set_xlim(0, epochs)
+  #ax2.set_xlabel("Train epochs", size=14)
+  #ax2.set_xticks([0, epochs * 0.2, epochs * .4, epochs * .6, epochs * 0.8, epochs])
 
-  handles, labels = [(a + b) for a, b in zip(ax1.get_legend_handles_labels(), ax2.get_legend_handles_labels())]
+  #handles, labels = [(a + b) for a, b in zip(ax1.get_legend_handles_labels(), ax2.get_legend_handles_labels())]
+  handles, labels = ax1.get_legend_handles_labels()
   plt.legend(handles, labels, frameon=True, fontsize=18)
 
-  fname = "run_id={}".format(run_id)
+  fname = ""
   if len(fname_labels) > 0:
     fname += "," + ",".join(["{}={}".format(l, str(config[l])) for l in fname_labels])
+  fname += "run_num={}".format(run_num)
   fpath = os.path.join(outdir, fname)
   plt.tight_layout()
   plt.savefig(fpath + ".png")

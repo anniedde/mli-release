@@ -1,4 +1,4 @@
-import os
+import os, sys
 import json
 import functools
 
@@ -10,15 +10,16 @@ import torch.nn.functional as F
 import numpy as np
 import tqdm
 
-from mli.models import interpolate_state, get_activation_function
-import mli.models as models
-from mli.data import load_data
-import mli.metrics as metrics_utils
-from mli.models import warm_bn
+sys.path.insert(1, '/usr/xtmp/CSPlus/VOLDNN/Annie/mli-release')
+from lib.mli.models import interpolate_state, get_activation_function
+import lib.mli.models as models
+from lib.mli.data import load_data
+import lib.mli.metrics as metrics_utils
+from lib.mli.models import warm_bn
 
-from mli_eval.processing.experiments import get_run_stats, get_run_model_states
-from mli_eval.model.eval import eval_model, eval_model_per_example
-from mli_eval.model.interp import interp_networks, interp_networks_eval_examples, interpolate_state
+from lib.mli_eval.processing.experiments import get_run_stats, get_run_model_states
+from lib.mli_eval.model.eval import eval_model, eval_model_per_example
+from lib.mli_eval.model.interp import interp_networks, interp_networks_eval_examples, interpolate_state
 
 MODEL_MAP = {
   'resnet-20': models.resnet20,

@@ -1,0 +1,5 @@
+INFO - mli_cifar10 - Running command 'main'
+INFO - mli_cifar10 - Started run with ID "hi"
+INFO - mli_cifar10 - Completed after 0:00:00
+<sacred.run.Run object at 0x147cd30eb588>
+<class 'sacred.run.Run'>

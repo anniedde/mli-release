@@ -1,4 +1,5 @@
 import os
+import sys
 import itertools
 import argparse
 
@@ -7,13 +8,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 plt.style.use('seaborn')
+from utils import *
 
-import mli.metrics as metrics_utils
+sys.path.insert(1, '/usr/xtmp/CSPlus/VOLDNN/Annie/mli-release')
+import lib.mli.metrics as metrics_utils
 import json
 
-from .utils import *
-from mli_eval.plotting.interp import plot_interp, plot_all_interp
-from mli_eval.processing.experiments import get_monotonicity_metrics, summarize_metrics
+from lib.mli_eval.plotting.interp import plot_interp, plot_all_interp
+from lib.mli_eval.processing.experiments import get_monotonicity_metrics, summarize_metrics
 
 parser = argparse.ArgumentParser()
 parser.add_argument("expdir")
@@ -106,9 +108,10 @@ def process_experiments(expdir, outdir):
     conf_filter=lambda c: c['optim_name'] == 'adam',
     color_map=model_cmap
   )
-  if False:
+  if True:
     for i in range(len(all_configs)):
-      plot_interp(all_configs[i], all_metrics[i], outdir)
+      print(all_configs[i])
+      plot_interp(all_configs[i], all_metrics[i], outdir, ["dset_name", "model_name", "optim_name", "lr"])
 
 
 

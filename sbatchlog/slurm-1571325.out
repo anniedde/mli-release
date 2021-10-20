@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "scripts/train_cifar/train.py", line 30, in <module>
+    print(ex.config())
+TypeError: config() missing 1 required positional argument: 'function'

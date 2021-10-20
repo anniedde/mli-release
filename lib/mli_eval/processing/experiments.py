@@ -12,6 +12,7 @@ def get_run_stats(expdir, compute_weight_dist=True):
 	metrics = []
 	for rundir in alldirs:
 		# Sacred saves all source code
+		print('Now in directory ', rundir)
 		if rundir == "_sources":
 			continue
 		dirpath = os.path.join(expdir, rundir)

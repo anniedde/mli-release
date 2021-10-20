@@ -17,7 +17,8 @@ CONFIG_CIFAR10 = {
     ],
   'optim_name': ['sgd', 'adam'],
   'dset_name': ['cifar10'],
-  'num_classes': [10]
+  'num_classes': [10],
+  'run_num': [1, 2, 3]
 }
 
 CONFIG_CIFAR100 = {
@@ -63,7 +64,7 @@ CONFIG_CIFAR100_INIT = {
 }
 
 
-COMMAND_TEMPLATE = 'python scripts/train_cifar/train.py with '
+COMMAND_TEMPLATE = 'python3 scripts/train_cifar/train.py with '
 
 SBATCH_1 = """#!/bin/bash
 #SBATCH --account=deadline

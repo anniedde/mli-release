@@ -1,0 +1,12 @@
+Unable to init server: Could not connect: Connection refused
+Unable to init server: Could not connect: Connection refused
+
+(train.py:20628): Gdk-CRITICAL **: 11:22:15.897: gdk_cursor_new_for_display: assertion 'GDK_IS_DISPLAY (display)' failed
+INFO - mli_cifar10 - Running command 'main'
+INFO - mli_cifar10 - Started run with ID "1571447"
+INFO - mli_cifar10 - Completed after 0:00:00
+<sacred.run.Run object at 0x152259e489e8>
+<class 'sacred.run.Run'>
+1571447
+<sacred.metrics_logger.MetricsLogger object at 0x152259e48be0>
+{'dset_name': 'cifar10', 'datasize': 60000, 'batchsize': 128, 'model_name': 'alexnet', 'loss_fn': 'ce', 'num_classes': 10, 'identity_init': True, 'init_type': 'default', 'epochs': 2, 'optim_name': 'sgd', 'lr': 0.1, 'beta': 0.9, 'weight_decay': 0.0001, 'decay_milestones': [60, 90, 120], 'decay_factor': 0.1, 'alpha_steps': 2, 'cuda': True, 'min_loss_threshold': 1.5, 'min_loss_epoch_check': 35, 'log_wdist': True, 'tag': 'cifar10', 'seed': 17, 'save_freq': 25, 'eval_gl': False, 'run_num': 1}

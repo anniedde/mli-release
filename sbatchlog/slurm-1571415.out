@@ -1,0 +1,15 @@
+Unable to init server: Could not connect: Connection refused
+Unable to init server: Could not connect: Connection refused
+
+(train.py:19518): Gdk-CRITICAL **: 11:19:24.950: gdk_cursor_new_for_display: assertion 'GDK_IS_DISPLAY (display)' failed
+INFO - mli_cifar10 - Running command 'main'
+INFO - mli_cifar10 - Started run with ID "1571415"
+<sacred.run.Run object at 0x14615aca89b0>
+<class 'sacred.run.Run'>
+1571415
+ERROR - mli_cifar10 - Failed after 0:00:00!
+Traceback (most recent calls WITHOUT Sacred internals):
+  File "scripts/train_cifar/train.py", line 282, in main
+    print(_run.metrics)
+AttributeError: 'Run' object has no attribute 'metrics'
+

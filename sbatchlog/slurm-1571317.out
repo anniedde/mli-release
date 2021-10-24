@@ -1,12 +1,0 @@
-INFO - mli_cifar10 - Running command 'main'
-INFO - mli_cifar10 - Started run with ID "hi_from_fileobserver"
-  0%|          | 0/3 [00:00<?, ?it/s] 33%|███▎      | 1/3 [00:12<00:25, 12.85s/it] 67%|██████▋   | 2/3 [00:25<00:12, 12.85s/it]100%|██████████| 3/3 [00:38<00:00, 12.89s/it]100%|██████████| 3/3 [00:38<00:00, 12.89s/it]
-INFO - mli_cifar10 - Completed after 0:00:43
-<sacred.run.Run object at 0x14cbdc1e74a8>
-<class 'sacred.run.Run'>
-hi_from_fileobserver
-Files already downloaded and verified
-Files already downloaded and verified
-Found an existing checkpoint. Loading state...
-Training from epoch 3
-Files already downloaded and verified

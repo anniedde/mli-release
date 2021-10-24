@@ -1,0 +1,8 @@
+Unable to init server: Could not connect: Connection refused
+Unable to init server: Could not connect: Connection refused
+
+(eval_runs.py:20832): Gdk-CRITICAL **: 21:31:30.411: gdk_cursor_new_for_display: assertion 'GDK_IS_DISPLAY (display)' failed
+Now in directory  _sources
+Now in directory  1572090
+Found 1 runs
+{'alpha_steps': 10, 'batchsize': 128, 'beta': 0.9, 'cuda': True, 'datasize': 60000, 'decay_factor': 0.1, 'decay_milestones': [60, 90, 120], 'dset_name': 'cifar10', 'epochs': 10, 'eval_gl': False, 'identity_init': True, 'init_type': 'default', 'log_wdist': True, 'loss_fn': 'ce', 'lr': 0.1, 'min_loss_epoch_check': 35, 'min_loss_threshold': 1.5, 'model_name': 'alexnet', 'num_classes': 10, 'optim_name': 'sgd', 'run_num': 1, 'save_freq': 25, 'seed': 17, 'tag': 'cifar10', 'weight_decay': 0.0001, 'run_id': '1572090'}

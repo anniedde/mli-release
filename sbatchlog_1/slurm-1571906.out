@@ -1,0 +1,6 @@
+Unable to init server: Could not connect: Connection refused
+Unable to init server: Could not connect: Connection refused
+
+(eval_runs.py:21892): Gdk-CRITICAL **: 17:32:14.829: gdk_cursor_new_for_display: assertion 'GDK_IS_DISPLAY (display)' failed
+Incomplete experiment output in runs/mli_cifar10
+Found 0 runs

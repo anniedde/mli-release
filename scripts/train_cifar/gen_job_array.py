@@ -12,13 +12,12 @@ CONFIG_CIFAR10 = {
   'model_name': [
       'resnet-20', 'fixup_resnet-20', 'resnet-20-nobn',
       'resnet-32', 'fixup_resnet-32', 'resnet-32-nobn',
-      'resnet-44', 'fixup_resnet-44', 'resnet-44-nobn',
-      'resnet-56', 'fixup_resnet-56', 'resnet-56-nobn',
+      'resnet-44', 'fixup_resnet-44', 'resnet-44-nobn' #,
+      #'resnet-56', 'fixup_resnet-56', 'resnet-56-nobn',
     ],
   'optim_name': ['sgd', 'adam'],
   'dset_name': ['cifar10'],
-  'num_classes': [10],
-  'run_num': [1, 2, 3]
+  'num_classes': [10]
 }
 
 CONFIG_CIFAR100 = {

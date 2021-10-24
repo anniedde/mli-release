@@ -65,7 +65,8 @@ sh_base = ["#!/bin/bash\n",
            "#SBATCH -o ./sbatchlog/slurm-%j.out\n",
            "#SBATCH -c {}\n".format(c),
            "#SBATCH --mem={}G\n".format(m),
-           "#SBATCH --gres=gpu:{}\n".format(g),
+           "#SBATCH --gres=gpu:{}\n".format(g) #,
+           #"#SBATCH --array=0-2%1"
            ]
 
 if args.n is not None:

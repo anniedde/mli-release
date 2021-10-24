@@ -107,7 +107,7 @@ def plot_interp(config, metrics, outdir, fname_labels=[]):
   ax1 = fig.add_subplot(111)
   #ax2 = ax1.twiny()
 
-  ax1.plot(alpha_steps, np.array(interp_losses), c='green', ls='--', label='Interpolation Loss')
+  ax1.plot(alpha_steps, np.array(interp_losses), label='Interpolation Loss')
   ax1.set_xlabel(r"Interpolation ($\alpha$)", size=14)
   ax1.set_ylabel("Loss", size=14)
   ax1.set_xlim(0, 1)
@@ -123,9 +123,10 @@ def plot_interp(config, metrics, outdir, fname_labels=[]):
 
   fname = ""
   if len(fname_labels) > 0:
-    fname += "," + ",".join(["{}={}".format(l, str(config[l])) for l in fname_labels])
-  fname += "run_num={}".format(run_num)
+    fname += ",".join(["{}={}".format(l, str(config[l])) for l in fname_labels])
+  fname += ",run_num={}".format(run_num)
   fpath = os.path.join(outdir, fname)
+  plt.title(fname)
   plt.tight_layout()
   plt.savefig(fpath + ".png")
   plt.savefig(fpath + ".pdf")

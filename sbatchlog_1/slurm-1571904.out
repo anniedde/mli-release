@@ -1,0 +1,8 @@
+Unable to init server: Could not connect: Connection refused
+Unable to init server: Could not connect: Connection refused
+
+(eval_runs.py:21670): Gdk-CRITICAL **: 17:30:19.580: gdk_cursor_new_for_display: assertion 'GDK_IS_DISPLAY (display)' failed
+Traceback (most recent call last):
+  File "scripts/train_cifar/eval/eval_runs.py", line 11, in <module>
+    from .utils import *
+ModuleNotFoundError: No module named '__main__.utils'; '__main__' is not a package

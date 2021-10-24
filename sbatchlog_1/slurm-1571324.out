@@ -1,0 +1,13 @@
+<bound method Ingredient.config of <sacred.experiment.Experiment object at 0x14d195f35b70>>
+INFO - mli_cifar10 - Running command 'main'
+INFO - mli_cifar10 - Started run with ID "hi_from_fileobserver"
+  0%|          | 0/3 [00:00<?, ?it/s] 33%|███▎      | 1/3 [00:12<00:24, 12.43s/it] 67%|██████▋   | 2/3 [00:24<00:12, 12.38s/it]100%|██████████| 3/3 [00:37<00:00, 12.38s/it]100%|██████████| 3/3 [00:37<00:00, 12.36s/it]
+INFO - mli_cifar10 - Completed after 0:00:42
+<sacred.run.Run object at 0x14d0fe19b358>
+<class 'sacred.run.Run'>
+hi_from_fileobserver
+Files already downloaded and verified
+Files already downloaded and verified
+Found an existing checkpoint. Loading state...
+Training from epoch 3
+Files already downloaded and verified

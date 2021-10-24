@@ -60,16 +60,16 @@ def get_config():
     # Misc
     alpha_steps = 50
     cuda = True
-    min_loss_threshold = 1.5
-    min_loss_epoch_check = 35  # Before first lr decay by default
+    min_loss_threshold = 2.3
+    min_loss_epoch_check = 50  # Before first lr decay by default
     log_wdist = True
 
     # Experiment Config
     tag = "cifar10"
     seed = 17
     save_freq = 25
-    eval_gl = True
-    run_num = 1
+    eval_gl = False
+    run_num = 2
 
 
 @ex.capture

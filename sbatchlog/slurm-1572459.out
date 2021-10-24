@@ -1,0 +1,33 @@
+Unable to init server: Could not connect: Connection refused
+Unable to init server: Could not connect: Connection refused
+
+(train.py:6107): Gdk-CRITICAL **: 06:27:22.834: gdk_cursor_new_for_display: assertion 'GDK_IS_DISPLAY (display)' failed
+INFO - mli_cifar10 - Running command 'main'
+INFO - mli_cifar10 - Started run with ID "1572459"
+  0%|          | 0/391 [00:00<?, ?it/s]  0%|          | 0/391 [00:00<?, ?it/s]
+<sacred.run.Run object at 0x14e55170eef0>
+<class 'sacred.run.Run'>
+1572459
+Files already downloaded and verified
+Files already downloaded and verified
+No checkpoint found. Training from scratch.
+ERROR - mli_cifar10 - Failed after 0:12:40!
+Traceback (most recent calls WITHOUT Sacred internals):
+  File "scripts/train_cifar/train.py", line 297, in main
+    model, train_loader, optimizer, scheduler, cfg, _run
+  File "scripts/train_cifar/train.py", line 210, in train_network
+    train_metrics.append(train_step(model, optimizer, x, y, True))
+  File "scripts/train_cifar/train.py", line 159, in train_step
+    logits = model(x)
+  File "/home/home4/aw364/.local/lib/python3.6/site-packages/torch/nn/modules/module.py", line 532, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/usr/xtmp/CSPlus/VOLDNN/Annie/mli-release/lib/mli/models/cifar/resnet.py", line 181, in forward
+    x = self.conv1(x)
+  File "/home/home4/aw364/.local/lib/python3.6/site-packages/torch/nn/modules/module.py", line 532, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/home4/aw364/.local/lib/python3.6/site-packages/torch/nn/modules/conv.py", line 345, in forward
+    return self.conv2d_forward(input, self.weight)
+  File "/home/home4/aw364/.local/lib/python3.6/site-packages/torch/nn/modules/conv.py", line 342, in conv2d_forward
+    self.padding, self.dilation, self.groups)
+RuntimeError: cuDNN error: CUDNN_STATUS_MAPPING_ERROR
+

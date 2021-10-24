@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH --account=deadline
-#SBATCH --qos=deadline
-#SBATCH --partition=t4v1,t4v2,p100
-#SBATCH --gres=gpu:1
+#SBATCH -t 90:00:00
+#SBATCH -o ./sbatchlog/slurm-%j.out
+#SBATCH -c 8
 #SBATCH --mem=16G
-#SBATCH --array=0-168%4
-#SBATCH --output="slogs/slurm-%A_%a.out"
-#SBATCH -c 2
+#SBATCH --gres=gpu:1
+#SBATCH --array=0-126%12
+#SBATCH --partition=compsci-gpu
+#SBATCH --array=0-126%12
 
 IFS=$'\n' read -d '' -r -a lines < jobs.txt
 echo "Starting task $SLURM_ARRAY_TASK_ID: ${lines[SLURM_ARRAY_TASK_ID]}"

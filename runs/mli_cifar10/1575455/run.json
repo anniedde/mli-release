@@ -1,0 +1,88 @@
+{
+  "artifacts": [],
+  "command": "main",
+  "experiment": {
+    "base_dir": "/usr/project/xtmp/CSPlus/VOLDNN/Annie/mli-release/scripts/train_cifar",
+    "dependencies": [
+      "munch==2.5.0",
+      "numpy==1.19.5",
+      "sacred==0.8.2",
+      "torch==1.5.0+cu92",
+      "tqdm==4.46.0"
+    ],
+    "mainfile": "train.py",
+    "name": "mli_cifar10",
+    "repositories": [
+      {
+        "commit": "677c199449d3f5d9ecc0329fd88bbe89c5f818ec",
+        "dirty": true,
+        "url": "https://github.com/anniedde/mli-release.git"
+      }
+    ],
+    "sources": [
+      [
+        "train.py",
+        "_sources/train_04ad04043f9b07969bbee3732bac01c3.py"
+      ]
+    ]
+  },
+  "heartbeat": "2021-10-24T17:43:37.027697",
+  "host": {
+    "ENV": {},
+    "cpu": "Intel(R) Xeon(R) CPU E5-2640 v3 @ 2.60GHz",
+    "gpus": {
+      "driver_version": "470.74",
+      "gpus": [
+        {
+          "model": "Tesla K80",
+          "persistence_mode": false,
+          "total_memory": 11441
+        }
+      ]
+    },
+    "hostname": "gpu-compute1",
+    "os": [
+      "Linux",
+      "Linux-4.15.0-159-generic-x86_64-with-Ubuntu-18.04-bionic"
+    ],
+    "python_version": "3.6.9"
+  },
+  "meta": {
+    "command": "main",
+    "options": {
+      "--beat-interval": null,
+      "--capture": null,
+      "--comment": null,
+      "--debug": false,
+      "--enforce_clean": false,
+      "--file_storage": null,
+      "--force": false,
+      "--help": false,
+      "--loglevel": null,
+      "--mongo_db": null,
+      "--name": null,
+      "--pdb": false,
+      "--print-config": false,
+      "--priority": null,
+      "--queue": false,
+      "--s3": null,
+      "--sql": null,
+      "--tiny_db": null,
+      "--unobserved": false,
+      "COMMAND": null,
+      "UPDATE": [
+        "lr=0.3",
+        "model_name=fixup_resnet-32",
+        "optim_name=sgd",
+        "dset_name=cifar10",
+        "num_classes=10"
+      ],
+      "help": false,
+      "with": true
+    }
+  },
+  "resources": [],
+  "result": null,
+  "start_time": "2021-10-24T17:17:25.811883",
+  "status": "RUNNING"
+}

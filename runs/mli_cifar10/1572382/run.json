@@ -1,0 +1,90 @@
+{
+  "artifacts": [],
+  "command": "main",
+  "experiment": {
+    "base_dir": "/usr/project/xtmp/CSPlus/VOLDNN/Annie/mli-release/scripts/train_cifar",
+    "dependencies": [
+      "munch==2.5.0",
+      "numpy==1.19.5",
+      "sacred==0.8.2",
+      "torch==1.5.0+cu92",
+      "tqdm==4.46.0"
+    ],
+    "mainfile": "train.py",
+    "name": "mli_cifar10",
+    "repositories": [
+      {
+        "commit": "8a5d95769b288450e3518f7f0f096cc1f33be5d4",
+        "dirty": true,
+        "url": "https://github.com/anniedde/mli-release.git"
+      }
+    ],
+    "sources": [
+      [
+        "train.py",
+        "_sources/train_e4ab9d4ce74ae589993bb5d5339291d5.py"
+      ]
+    ]
+  },
+  "heartbeat": "2021-10-20T07:34:30.380489",
+  "host": {
+    "ENV": {},
+    "cpu": "Intel(R) Xeon(R) CPU E5-2640 v4 @ 2.40GHz",
+    "gpus": {
+      "driver_version": "470.74",
+      "gpus": [
+        {
+          "model": "Tesla P100-PCIE-12GB",
+          "persistence_mode": false,
+          "total_memory": 12198
+        }
+      ]
+    },
+    "hostname": "gpu-compute4",
+    "os": [
+      "Linux",
+      "Linux-4.15.0-159-generic-x86_64-with-Ubuntu-18.04-bionic"
+    ],
+    "python_version": "3.6.9"
+  },
+  "meta": {
+    "command": "main",
+    "options": {
+      "--beat-interval": null,
+      "--capture": null,
+      "--comment": null,
+      "--debug": false,
+      "--enforce_clean": false,
+      "--file_storage": null,
+      "--force": false,
+      "--help": false,
+      "--loglevel": null,
+      "--mongo_db": null,
+      "--name": null,
+      "--pdb": false,
+      "--print-config": false,
+      "--priority": null,
+      "--queue": false,
+      "--s3": null,
+      "--sql": null,
+      "--tiny_db": null,
+      "--unobserved": false,
+      "COMMAND": null,
+      "UPDATE": [
+        "lr=0.03",
+        "model_name=resnet-44",
+        "optim_name=sgd",
+        "dset_name=cifar10",
+        "num_classes=10",
+        "run_num=1"
+      ],
+      "help": false,
+      "with": true
+    }
+  },
+  "resources": [],
+  "result": null,
+  "start_time": "2021-10-20T05:30:30.713596",
+  "status": "COMPLETED",
+  "stop_time": "2021-10-20T07:34:30.366022"
+}

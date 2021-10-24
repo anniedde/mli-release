@@ -1,0 +1,31 @@
+{
+  "alpha_steps": 50,
+  "batchsize": 128,
+  "beta": 0.9,
+  "cuda": true,
+  "datasize": 60000,
+  "decay_factor": 0.1,
+  "decay_milestones": [
+    60,
+    90,
+    120
+  ],
+  "dset_name": "cifar10",
+  "epochs": 200,
+  "eval_gl": false,
+  "identity_init": true,
+  "init_type": "default",
+  "log_wdist": true,
+  "loss_fn": "ce",
+  "lr": 0.03,
+  "min_loss_epoch_check": 35,
+  "min_loss_threshold": 1.5,
+  "model_name": "resnet-20",
+  "num_classes": 10,
+  "optim_name": "adam",
+  "run_num": 1,
+  "save_freq": 25,
+  "seed": 17,
+  "tag": "cifar10",
+  "weight_decay": 0.0001
+}

@@ -20,6 +20,17 @@ CONFIG_CIFAR10 = {
   'num_classes': [10]
 }
 
+CONFIG_CIFAR10_vgg = {
+  'lr': [0.3, 0.1, 0.03, 0.01, 0.003, 0.001, 0.0003],
+  'model_name': [
+      'vgg19-nobn'
+    ],
+  'optim_name': ['sgd', 'adam'],
+  'dset_name': ['cifar10'],
+  'num_classes': [10],
+  'run_num': [1, 2]
+}
+
 CONFIG_CIFAR100 = {
   'lr': [0.3, 0.1, 0.03, 0.01, 0.003, 0.001, 0.0003],
   'model_name': [
@@ -115,7 +126,7 @@ def generate_job_strings(config):
 
 
 if __name__ == '__main__':
-    jobs = generate_job_strings(CONFIG_CIFAR10)
+    jobs = generate_job_strings(CONFIG_CIFAR10_vgg)
     with open(args.joblist_filename, 'w') as f:
         f.writelines(jobs)
     sbatch = build_sbatch_script('t4v1,t4v2,p100', str(len(jobs)), str(args.parallel_jobs), args.joblist_filename)

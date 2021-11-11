@@ -51,6 +51,7 @@ def process_experiments(expdir, outdir):
   monotonicity_summary = get_monotonicity_metrics(all_configs, all_metrics)
   with open(os.path.join(outdir, 'monotonicity_metrics.json'), 'w') as f:
     json.dump(monotonicity_summary, f)
+  """
   plot_all_interp(
     all_configs, all_metrics, outdir,
     loss_lb=args.plot_loss_lb, train_prefix="train",
@@ -64,6 +65,7 @@ def process_experiments(expdir, outdir):
     conf_filter=lambda c: c['dset_name'] == 'cifar100',
     color_map=model_cmap
   )
+  
   plot_all_interp(
     all_configs, all_metrics, outdir,
     loss_lb=args.plot_loss_lb, train_prefix="eval",
@@ -107,7 +109,7 @@ def process_experiments(expdir, outdir):
     ],
     conf_filter=lambda c: c['optim_name'] == 'adam',
     color_map=model_cmap
-  )
+  )"""
   if True:
     for i in range(len(all_configs)):
       print(all_configs[i])

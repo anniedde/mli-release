@@ -1,0 +1,179 @@
+import functools
+import sys, os
+
+import json
+import torch
+import torchvision
+import matplotlib.pyplot as plt
+import numpy as np
+from munch import Munch
+import argparse
+
+import torch
+
+sys.path.insert(1, '/usr/xtmp/CSPlus/VOLDNN/Annie/mli-release')
+import lib.mli.models as models
+from lib.mli.data import load_data, load_data_subset
+from lib.mli.models import interpolate_state
+
+MODEL_MAP = {
+    "resnet-20": models.resnet20,
+    "fixup_resnet-20": models.fixup_resnet20,
+    "resnet-20-nobn": functools.partial(models.resnet20, use_batchnorm=False),
+    "resnet-32": models.resnet32,
+    "fixup_resnet-32": models.fixup_resnet32,
+    "resnet-32-nobn": functools.partial(models.resnet32, use_batchnorm=False),
+    "resnet-44": models.resnet44,
+    "fixup_resnet-44": models.fixup_resnet44,
+    "resnet-44-nobn": functools.partial(models.resnet44, use_batchnorm=False),
+    "resnet-56": models.resnet56,
+    "fixup_resnet-56": models.fixup_resnet56,
+    "resnet-56-nobn": functools.partial(models.resnet56, use_batchnorm=False),
+    "resnet-110": models.resnet110,
+    "fixup_resnet-110": models.fixup_resnet110,
+    "resnet-110-nobn": functools.partial(models.resnet110, use_batchnorm=False),
+    "vgg16": models.vgg16_bn,
+    "vgg16-nobn": models.vgg16,
+    "vgg19": models.vgg19_bn,
+    "vgg19-nobn": models.vgg19,
+    "lenet": models.LeNet,
+    "alexnet": models.AlexNet
+}
+
+def get_model(model_name, num_classes, identity_init):
+    if "fixup" not in model_name and "resnet" in model_name:
+        return MODEL_MAP[model_name](num_classes=num_classes, identity_init=identity_init)
+    else:
+        return MODEL_MAP[model_name](num_classes=num_classes)
+
+def get_activation(name, out_dict):
+    def hook(model, input, output):
+        if name not in out_dict.keys():
+            out_dict[name] = output.detach()
+        else:
+            out_dict[name] += output.detach()
+    return hook
+
+def printnorm(self, input, output):
+    # input is a tuple of packed inputs
+    # output is a Tensor. output.data is the Tensor we are interested
+    print('Inside ' + self.__class__.__name__ + ' forward')
+    print('')
+    print('input: ', type(input))
+    print('input[0]: ', type(input[0]))
+    print('output: ', type(output))
+    print('')
+    print('input size:', input[0].size())
+    print('output size:', output.data.size())
+    print('output norm:', output.data.norm())
+
+
+parser = argparse.ArgumentParser(description='Process some integers.')
+parser.add_argument('-alpha', type=float,
+                    help='alpha * final + (1-alpha) * initial')
+args = parser.parse_args()
+
+alpha = 0.5
+batchsize = 1
+datasize = 10000
+
+# resnet 32, no bn, SGD, lr 0.01, run num 2
+run_num = 1575674
+layers = []
+
+path = "/usr/xtmp/CSPlus/VOLDNN/Annie/mli-release/output_signal_data/resnet32-noBN-sgd-lr0_01-alpha{}-expectation-run1/".format(str(alpha).replace(".", "_"))
+print('path is ', path)
+isExist = os.path.exists(path)
+if not isExist:
+  # Create a new directory because it does not exist 
+  os.makedirs(path)
+  print("The new directory is created!")
+
+with open('/usr/xtmp/CSPlus/VOLDNN/Annie/mli-release/runs/mli_cifar10/{}/config.json'.format(run_num)) as f:
+    config = json.load(f)
+
+cfg = Munch.fromDict(config)
+train_loader = load_data(cfg.dset_name, batchsize, datasize, train=True, shuffle=False, random_augment_train=False)
+
+model = get_model(cfg.model_name, cfg.num_classes, cfg.identity_init)
+if cfg.cuda:
+    model = model.cuda()
+
+init_state = torch.load('/usr/xtmp/CSPlus/VOLDNN/Annie/mli-release/runs/mli_cifar10/{}/init.pt'.format(run_num))
+init_state = init_state["model_state"]
+final_state = torch.load('/usr/xtmp/CSPlus/VOLDNN/Annie/mli-release/runs/mli_cifar10/{}/final.pt'.format(run_num))
+final_state = final_state["model_state"]
+
+interpolate_state(model.state_dict(), init_state, final_state, alpha)
+
+interpolated_handles = []
+
+interpolated_output = {}
+
+for name, param in model.named_modules():
+    if 'relu' in name or 'fc' in name:
+        print(name)
+        interpolated_handles.append(param.register_forward_hook(get_activation(name, interpolated_output)))
+        layers.append(name)
+
+model.eval()
+with torch.no_grad():
+    for x,y in train_loader:
+        x,y = x.cuda(), y.cuda()
+        logits = model(x)
+
+# remove forward hooks
+for handle in interpolated_handles:
+    handle.remove()
+
+# load data again (identically)
+train_loader = load_data(cfg.dset_name, batchsize, datasize, train=True, shuffle=False, random_augment_train=False)
+
+model.load_state_dict(final_state)
+
+final_handles = []
+final_output = {}
+
+for name, param in model.named_modules():
+    if 'relu' in name or 'fc' in name:
+        print(name)
+        final_handles.append(param.register_forward_hook(get_activation(name, final_output)))
+
+model.eval()
+with torch.no_grad():
+    for x,y in train_loader:
+        x,y = x.cuda(), y.cuda()
+        logits = model(x)
+
+for layer, layer_output in final_output.items():
+    final_output[layer] = torch.div(layer_output, datasize)
+
+for layer, layer_output in interpolated_output.items():
+    interpolated_output[layer] = torch.div(layer_output, datasize)
+
+signals = []
+for layer in layers:
+
+    interpolated_layer_output = torch.flatten(interpolated_output[layer])
+    final_layer_output = torch.flatten(final_output[layer])
+
+    signal = (torch.dot(interpolated_layer_output, final_layer_output)) / (torch.norm(final_layer_output)**2)
+    signals.append(signal.item())
+    print(signal.item())
+
+save_dict = {}
+save_dict['layers'] = layers
+save_dict['signals'] = signals
+
+plt.scatter(layers, signals)
+plt.title('Layer in Network vs. Signal Ratio (of expectations), alpha={}'.format(alpha))
+plt.xlabel('Layer in Resnet 32 Network')
+plt.ylabel('Projection of Expected Interpolated Output on Expected Final Output', wrap=True)
+plt.savefig(os.path.join(path, 'signals.png'), dpi=300)
+
+with open(os.path.join(path, 'signals.json'), 'w') as f:
+    json.dump(save_dict, f)
+
+torch.save(interpolated_output, os.path.join(path, 'interpolated_output.pt'))
+torch.save(final_output, os.path.join(path, 'final_output.pt'))
+print('done!')

@@ -69,7 +69,7 @@ def get_config():
     seed = 17
     save_freq = 25
     eval_gl = False
-    run_num = 2
+    run_num = 1
 
 
 @ex.capture

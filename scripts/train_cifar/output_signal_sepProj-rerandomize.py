@@ -80,6 +80,53 @@ def subtract(dict1, dict2):
         ret[layer] = torch.sub(dict1[layer], dict2[layer])
     return ret
 
+def decompose(cur_state, min_state):
+    noise_state = deepcopy(cur_state)
+    proj_state = deepcopy(cur_state)
+
+    # get projection of cur_state onto min_state
+    for opr in cur_state:
+
+        if "bias" not in opr:
+
+            noise_state[opr].zero_()
+            proj_state[opr].zero_()
+
+            cur_layer = cur_state[opr]
+            min_layer = min_state[opr]
+
+            cur_flattened = torch.flatten(cur_layer)
+            min_flattened = torch.flatten(min_layer)
+
+            proj_flattened = torch.mul(min_flattened, (torch.dot(cur_flattened, min_flattened)) / (torch.norm(min_flattened)**2))
+            proj = proj_flattened.reshape(cur_layer.shape)
+
+            noise_state[opr] = torch.sub(cur_layer, proj)
+            proj_state[opr] = proj
+
+
+    return proj_state, noise_state
+
+def rerandomize(weight, noise, rand_sd):
+
+    ret = deepcopy(weight)
+    for opr in ret:
+        if "bias" not in opr:
+            ret[opr].zero_()
+
+            noise_norm = torch.norm(noise[opr])
+            cur_norm = torch.norm(rand_sd[opr])
+            rand_flattened = torch.flatten(rand_sd[opr])
+            min_flattened = torch.flatten(weight[opr])
+            proj_flattened = torch.mul(min_flattened, (torch.dot(rand_flattened, min_flattened)) / (torch.norm(min_flattened)**2))
+            diff_flattened = torch.sub(rand_flattened, proj_flattened)
+            diff = diff_flattened.reshape(weight[opr].shape)
+            cur_norm = torch.norm(diff)
+            newNoise = torch.mul(diff, noise_norm / cur_norm)
+
+            ret[opr] = torch.add(weight[opr], newNoise)
+
+    return ret
 
 
 parser = argparse.ArgumentParser(description='Process some integers.')
@@ -88,6 +135,8 @@ parser.add_argument('-alpha', type=float,
 args = parser.parse_args()
 
 alpha = args.alpha
+
+alpha=0.5
 batchsize = 1
 datasize = 10000
 
@@ -121,29 +170,48 @@ model_final = get_model(cfg.model_name, cfg.num_classes, cfg.identity_init)
 if cfg.cuda:
     model_final = model_final.cuda()
 
-init_state = torch.load('/usr/xtmp/CSPlus/VOLDNN/Annie/mli-release/runs/mli_cifar10/{}/init.pt'.format(run_num))
-init_state = init_state["model_state"]
+true_init_state = torch.load('/usr/xtmp/CSPlus/VOLDNN/Annie/mli-release/runs/mli_cifar10/{}/init.pt'.format(run_num))
+true_init_state = true_init_state["model_state"]
+
+# get random state
+random_state = deepcopy(model_interpolated.state_dict())
+
 final_state = torch.load('/usr/xtmp/CSPlus/VOLDNN/Annie/mli-release/runs/mli_cifar10/{}/final.pt'.format(run_num))
 final_state = final_state["model_state"]
 
+weight, noise = decompose(true_init_state, final_state)
+init_state = rerandomize(weight, noise, random_state)
+
 interpolate_state(model_interpolated.state_dict(), init_state, final_state, alpha)
+model_final.load_state_dict(final_state)
 
 interpolated_mean_handles = []
+final_mean_handles = []
 interpolated_mean_output = {}
+final_mean_output = {}
 
 for layer in layers:
     interpolated_mean_handles.append(model_interpolated.features[layer].register_forward_hook(get_mean_activation('features[{}]'.format(layer), interpolated_mean_output)))
+for layer in layers:
+    final_mean_handles.append(model_final.features[layer].register_forward_hook(get_mean_activation('features[{}]'.format(layer), final_mean_output)))
 
 # get mean single outputs
 model_interpolated.eval()
+model_final.eval()
 with torch.no_grad():
     for x,y in getMean_loader:
         x,y = x.cuda(), y.cuda()
         __ = model_interpolated(x)
+        __ = model_final(x)
 
 # remove forward hooks
 for handle in interpolated_mean_handles:
     handle.remove()
+for handle in final_mean_handles:
+    handle.remove()
+
+for layer, layer_output in final_mean_output.items():
+    final_mean_output[layer] = torch.div(layer_output, datasize)
 
 for layer, layer_output in interpolated_mean_output.items():
     interpolated_mean_output[layer] = torch.div(layer_output, datasize)
@@ -151,57 +219,81 @@ for layer, layer_output in interpolated_mean_output.items():
 #########################
 
 interpolated_handles = []
+final_handles = []
 
 interpolated_single_output = {}
+final_single_output = {}
 for layer in layers:
     interpolated_handles.append(model_interpolated.features[layer].register_forward_hook(get_activation('features[{}]'.format(layer), interpolated_single_output)))
+    final_handles.append(model_final.features[layer].register_forward_hook(get_activation('features[{}]'.format(layer), final_single_output)))
 
+signals_dict = {}
+final_output_mean_squared_norms = {}
 interpolated_output_mean_squared_norms = {}
 
 model_interpolated.eval()
+model_final.eval()
 i = 0
 with torch.no_grad():
     for x,y in train_loader:
         x,y = x.cuda(), y.cuda()
         interpolated_single_output.clear()
+        final_single_output.clear()
         __ = model_interpolated(x)
-        print(i)
+        __ = model_final(x)
         i += 1
 
         interpolated_single_output = subtract(interpolated_single_output, interpolated_mean_output)
+        final_single_output = subtract(final_single_output, final_mean_output)
 
         for layer in interpolated_single_output:
             interpolated_layer_output = torch.flatten(interpolated_single_output[layer])
+            final_layer_output = torch.flatten(final_single_output[layer])
+            signal = torch.dot(interpolated_layer_output, final_layer_output)
 
-            if layer not in interpolated_output_mean_squared_norms.keys():
+            if layer not in signals_dict.keys():
+                signals_dict[layer] = signal.item()
+                final_output_mean_squared_norms[layer] = torch.norm(final_layer_output)**2
                 interpolated_output_mean_squared_norms[layer] = torch.norm(interpolated_layer_output)**2
 
             else:
+                signals_dict[layer] += signal.item()
+                final_output_mean_squared_norms[layer] += torch.norm(final_layer_output)**2
                 interpolated_output_mean_squared_norms[layer] += torch.norm(interpolated_layer_output)**2
 
 
-for key in interpolated_output_mean_squared_norms:
+for key in signals_dict:
+    signals_dict[key] = signals_dict[key] / datasize
+    final_output_mean_squared_norms[key] = sqrt(final_output_mean_squared_norms[key] / datasize)
     interpolated_output_mean_squared_norms[key] = sqrt(interpolated_output_mean_squared_norms[key] / datasize)
+    signals_dict[key] = signals_dict[key] / final_output_mean_squared_norms[key]
+
 
 save_dict = {}
-dict_layers = list(interpolated_output_mean_squared_norms.keys())
+dict_layers = list(signals_dict.keys())
 save_dict['layers'] = dict_layers
 
+signals = []
 norms = []
+ratios = []
 for layer in dict_layers:
+    signals.append(signals_dict[layer])
     norms.append(interpolated_output_mean_squared_norms[layer])
+    ratios.append(signals_dict[layer] / interpolated_output_mean_squared_norms[layer])
+save_dict['signals'] = signals
 save_dict['norms'] = norms
+save_dict['ratios'] = ratios
 
-#torch.save(interpolated_output_mean_squared_norms, os.path.join(path, 'norms.pt'))
+#torch.save(signals_dict, os.path.join(path, 'signals_randomInit.pt'))
 
-plt.scatter(layers, norms)
-plt.title('Layer in Network vs. Norm(interpolated output), alpha={}'.format(alpha))
+plt.scatter(layers, ratios)
+plt.title('Layer in Network vs. True Signal Ratio, alpha={}'.format(alpha))
 plt.xlabel('Layer in VGG 19 Network')
-plt.ylabel('Norm', wrap=True)
-plt.savefig(os.path.join(path, 'norms.png'), dpi=300)
+plt.ylabel('Signal Ratio', wrap=True)
+plt.savefig(os.path.join(path, 'signal-ratios_rerandomize.png'), dpi=300)
 
-with open(os.path.join(path, 'norms.json'), 'w') as f:
-    json.dump(interpolated_output_mean_squared_norms, f)
+with open(os.path.join(path, 'signals_rerandomize.json'), 'w') as f:
+    json.dump(save_dict, f)
 
 #torch.save(final_output, os.path.join(path, 'final_output.pt'))
 print('done!')

@@ -73,11 +73,11 @@ batchsize = 1
 datasize = 10000
 
 # vgg-19, no bn, SGD, lr 0.01
-#run_num = 1577604
-#layers = [1,3,6,8,11,13,15,17,20,22,24,26,29,31,33,35]
+run_num = 1577604
+layers = [1,3,6,8,11,13,15,17,20,22,24,26,29,31,33,35]
 
 # resnet 32, no bn, SGD, lr 0.01, run num 2
-run_num = 1575674
+#run_num = 1575674
 #layers = [1]
 
 with open('/usr/xtmp/CSPlus/VOLDNN/Annie/mli-release/runs/mli_cifar10/{}/config.json'.format(run_num)) as f:
@@ -91,10 +91,14 @@ model = get_model(cfg.model_name, cfg.num_classes, cfg.identity_init)
 #    model = model.cuda()
 
 sd = {}
-for name, param in model.named_modules():
+for name, param in model.state_dict().items():
     print(name)
-    if 'relu' in name or 'fc' in name:
+    """
+    if 'relu' not in name:
         
-        param.register_forward_hook(get_activation('name', sd))
+        flattened = torch.flatten(param)
+        unflattened = flattened.reshape(param.shape)
+        print(torch.equal(param, unflattened))
+    """
 
 #model.layer1.0..register_forward_hook(get_activation('features[{}]'.format(layer), final_output)

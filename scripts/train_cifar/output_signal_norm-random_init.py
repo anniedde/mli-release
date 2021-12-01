@@ -121,8 +121,12 @@ model_final = get_model(cfg.model_name, cfg.num_classes, cfg.identity_init)
 if cfg.cuda:
     model_final = model_final.cuda()
 
-init_state = torch.load('/usr/xtmp/CSPlus/VOLDNN/Annie/mli-release/runs/mli_cifar10/{}/init.pt'.format(run_num))
-init_state = init_state["model_state"]
+#init_state = torch.load('/usr/xtmp/CSPlus/VOLDNN/Annie/mli-release/runs/mli_cifar10/{}/init.pt'.format(run_num))
+#init_state = init_state["model_state"]
+
+# init_state is random
+init_state = deepcopy(model_interpolated.state_dict())
+
 final_state = torch.load('/usr/xtmp/CSPlus/VOLDNN/Annie/mli-release/runs/mli_cifar10/{}/final.pt'.format(run_num))
 final_state = final_state["model_state"]
 
@@ -198,9 +202,9 @@ plt.scatter(layers, norms)
 plt.title('Layer in Network vs. Norm(interpolated output), alpha={}'.format(alpha))
 plt.xlabel('Layer in VGG 19 Network')
 plt.ylabel('Norm', wrap=True)
-plt.savefig(os.path.join(path, 'norms.png'), dpi=300)
+plt.savefig(os.path.join(path, 'norms_randomInit.png'), dpi=300)
 
-with open(os.path.join(path, 'norms.json'), 'w') as f:
+with open(os.path.join(path, 'norms_randomInit.json'), 'w') as f:
     json.dump(interpolated_output_mean_squared_norms, f)
 
 #torch.save(final_output, os.path.join(path, 'final_output.pt'))
